@@ -14,7 +14,7 @@
 			$( "#datepicker" ).datepicker({
 				dateFormat: 'dd MM yy',
 				onSelect: function(d){
-					logs=getDayLog(new Date(d));
+					var logs=getDayLog(new Date(d));
 					$("#logs").html("")
 					for (li in logs) {
 						for (lj in logs[li]){
