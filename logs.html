@@ -1,0 +1,45 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Журнал событий</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="css/style.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="css/jquery-ui-1.10.0.custom.min.css" />
+	<script src="js/jquery.js"></script>
+	<script src="js/jquery-ui-1.10.0.custom.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+	<script src="js/logs.js"></script>
+	<script>
+		$(function() {
+			$( "#datepicker" ).datepicker({
+				dateFormat: 'dd MM yy',
+				onSelect: function(d){
+					logs=getDayLog(new Date(d));
+					$("#logs").html("")
+					for (li in logs) {
+						for (lj in logs[li]){
+							l=logs[li][lj]
+							$("#logs").html($("#logs").html()+"<tr><td>"+(new Date(l.time*1000)).toLocaleString()+' '+l.host +' '+l.state+"</td></tr>")
+						}
+					}
+				}
+			});
+		});
+	</script>
+</head>
+<body>
+	<p>Date: <div  id="datepicker"></div></p>
+	<div class="container-fluid">
+		<div class="row-fluid">
+		  <div class="span6">
+			<table border=1 class="table">
+			<thead><th>Логи</th></thead>
+			<tbody id="logs"></tbody>
+			</table>
+		  </div>
+		  <div class="span6">
+		  </div>
+		</div>
+	</div>
+</body>
+</html>
