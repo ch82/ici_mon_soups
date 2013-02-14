@@ -21,7 +21,7 @@ function getLog(start,end,order,limit,noprevseek,filter){
 				logs[l.host] = [];
 				if(!noprevseek && l.state=='UP') {
 					var lstlog = getLog(null, l.time/1000-1, 'new2old', 1, true,'HOST+ALERT:+'+l.host+';DOWN')
-					if(lstlog.length) l.duration = l.time - lstlog[l.host][0].time;
+					if(lstlog.hasOwnProperty(l.host)) l.duration = l.time - lstlog[l.host][0].time;
 				}
 			}
 			else {
