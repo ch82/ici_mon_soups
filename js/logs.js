@@ -24,9 +24,26 @@ function getLog(start,end,order,limit){
 	}})
 	return logs;
 }
+function cleanLog(log) {
+	for ( var hi in log) {
+		var h = log[hi]
+		var laststate = null
+		for (var evi=0; evi<h.length;) {
+			ev = h[evi]
+			if (ev.state == laststate){
+				h.splice(evi,1)
+			}
+			else {
+				laststate = ev.state
+				evi++
+			}
+		}
+	}
+	return log
+}
 function getDayLog(day) {
 	var start = day.valueOf()/1000;
-	return getLog( start, start + 86400)
+	return cleanLog(getLog( start, start + 86400))
 }
 $(document).ready(function(){
 	getLog(0,2147483647)
