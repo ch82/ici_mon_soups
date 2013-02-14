@@ -1,6 +1,6 @@
 function parselogEntry(logEntry){
 	var rexp = /^HOST ALERT: (.+?);(DOWN|UP);(SOFT|HARD);\d+;.+$/.exec(logEntry.log_entry)
-	return {'time':logEntry.timestamp,'host':rexp[1],'state':rexp[2]}
+	return {'time': new Date(logEntry.timestamp*1000),'host':rexp[1],'state':rexp[2]}
 }
 
 function getLog(start,end,order,limit){

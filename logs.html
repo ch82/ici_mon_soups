@@ -19,7 +19,7 @@
 					for (li in logs) {
 						for (lj in logs[li]){
 							l=logs[li][lj]
-							$("#logs").html($("#logs").html()+"<tr><td>"+(new Date(l.time*1000)).toLocaleString()+' '+l.host +' '+l.state+"</td></tr>")
+							$("#logs").html($("#logs").html()+"<tr><td>"+l.time.toLocaleString()+' '+l.host +' '+l.state+"</td></tr>")
 						}
 					}
 				}
