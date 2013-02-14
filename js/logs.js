@@ -36,13 +36,15 @@ function cleanLog(log) {
 	for ( var hi in log) {
 		var h = log[hi]
 		var laststate = null
+		var duration = 0
 		for (var evi=0; evi<h.length;) {
-			ev = h[evi]
+			var ev = h[evi]
 			if (ev.state == laststate){
-				h.splice(evi,1)
+				duration += h.splice(evi,1)[0].duration //possible type error if ''
 			}
 			else {
 				laststate = ev.state
+				ev.duration += duration
 				evi++
 			}
 		}
