@@ -1,15 +1,16 @@
 function parselogEntry(logEntry){
 	var rexp = /^HOST ALERT: (.+?);(DOWN|UP);(SOFT|HARD);\d+;.+$/.exec(logEntry.log_entry)
-	return {'time': new Date(logEntry.timestamp*1000),'host':rexp[1],'state':rexp[2]}
+	return {'time': new Date(logEntry.timestamp*1000),'host':rexp[1],'state':rexp[2],'duration':''}
 }
 
-function getLog(start,end,order,limit){
+function getLog(start,end,order,limit,noprevseek,filter){
 	function generateURL(){
 		if (!start) { start = '0' }
 		if (!end) { end = '2147483647' }
 		if (!order) { order = "old2new" }
-		if (!limit) { limit = 1000000 }	
-		return "/cgi-bin/icinga/showlog.cgi?ts_start="+ start+"&num_displayed="+limit+"&order="+order+"&ts_end="+end+"&query_string=HOST+ALERT&timeperiod=custom&noti=off&hst=on&sst=off&cmd=off&sms=off&evh=off&flp=off&dwn=off&jsonoutput";
+		if (!limit) { limit = 1000000 }
+		if (!filter) { filter = 'HOST+ALERT'}
+		return "/cgi-bin/icinga/showlog.cgi?ts_start="+ start+"&num_displayed="+limit+"&order="+order+"&ts_end="+end+"&query_string="+filter+"&timeperiod=custom&noti=off&hst=on&sst=off&cmd=off&sms=off&evh=off&flp=off&dwn=off&jsonoutput";
 	}
 	var logs = {};
 	$.ajax({dataType:"json", url:generateURL(), async:false, success:function(j){
@@ -18,6 +19,13 @@ function getLog(start,end,order,limit){
 			var l = parselogEntry(rawlog[le]);
 			if (!(l.host in logs)) {
 				logs[l.host] = [];
+				if(!noprevseek && l.state=='UP') {
+					var lstlog = getLog(null, l.time/1000-1, 'new2old', 1, true,'HOST+ALERT:+'+l.host+';DOWN')
+					if(lstlog.length) l.duration = l.time - lstlog[l.host][0].time;
+				}
+			}
+			else {
+				l.duration = l.time - logs[l.host][logs[l.host].length-1].time
 			}
 			logs[l.host].push(l)
 		}
@@ -45,6 +53,3 @@ function getDayLog(day) {
 	var start = day.valueOf()/1000;
 	return cleanLog(getLog( start, start + 86400))
 }
-$(document).ready(function(){
-	getLog(0,2147483647)
-})
