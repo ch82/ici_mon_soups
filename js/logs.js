@@ -55,3 +55,8 @@ function getDayLog(day) {
 	var start = day.valueOf()/1000;
 	return cleanLog(getLog( start, start + 86400))
 }
+function getMonthLog(year,month) {
+	var start = new Date(year,month);
+	var end = start.setMonth(2)-1;
+	return cleanLog(getLog( start.valueOf()/1000, end/1000))
+}

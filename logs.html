@@ -9,29 +9,56 @@
 	<script src="js/jquery-ui-1.10.0.custom.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
 	<script src="js/logs.js"></script>
+	<style id="calmodstyle"></style>
 	<script>
+		function calmodclick(t){
+			var style = $('#calmodstyle')
+			switch (t) {
+				case 'month':
+					style.html('.ui-datepicker-calendar { display:none }')
+					break;
+				case 'day':
+					style.html('.ui-datepicker-calendar { display:table }')
+			}
+		}
+		function renderLog(logs){
+			$("#logs").html("")
+			for (li in logs) {
+				for (lj in logs[li]){
+					l=logs[li][lj]
+					$("#logs").html($("#logs").html()+"<tr><td>"+l.time.toLocaleString()+' '+l.host +' '+l.state+' '+ l.duration/1000+'s'+"</td></tr>")
+				}
+			}			
+		}
 		$(function() {
 			$( "#datepicker" ).datepicker({
 				dateFormat: 'dd MM yy',
+				changeMonth: true, changeYear: true, showButtonPanel: true,
+				onChangeMonthYear: function(year, month) {
+					var logs=getMonthLog(new Date(year, month));
+					renderLog(logs)
+				},
 				onSelect: function(d){
 					var logs=getDayLog(new Date(d));
-					$("#logs").html("")
-					for (li in logs) {
-						for (lj in logs[li]){
-							l=logs[li][lj]
-							$("#logs").html($("#logs").html()+"<tr><td>"+l.time.toLocaleString()+' '+l.host +' '+l.state+' '+ l.duration/1000+'s'+"</td></tr>")
-						}
-					}
+					renderLog(logs)
 				}
 			});
+			$('#calmod').bind('click', function(){
+				alert('a')
+			})
 		});
 	</script>
 </head>
 <body>
-	<p>Date: <div  id="datepicker"></div></p>
 	<div class="container-fluid">
+		<form>
+			<input type="radio" name="calmod" onclick="calmodclick('day')" checked = "checked">День
+			<input type="radio" name="calmod" onclick="calmodclick('month')">Месяц
+		</form>
 		<div class="row-fluid">
+			<p>Date: <div  id="datepicker"></div></p>	
 		  <div class="span6">
+			
 			<table border=1 class="table">
 			<thead><th>Логи</th></thead>
 			<tbody id="logs"></tbody>
