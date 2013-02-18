@@ -13,12 +13,16 @@
 	<script>
 		function calmodclick(t){
 			var style = $('#calmodstyle')
+			var currdate = $("#datepicker").datepicker("getDate")
 			switch (t) {
 				case 'month':
 					style.html('.ui-datepicker-calendar { display:none }')
+					renderLog(getMonthLog(currdate.getUTCFullYear(),currdate.getMonth()+1))
 					break;
 				case 'day':
 					style.html('.ui-datepicker-calendar { display:table }')
+					renderLog(getDayLog(new Date(currdate)))
+					break
 			}
 		}
 		function renderLog(logs){
@@ -35,12 +39,10 @@
 				dateFormat: 'dd MM yy',
 				changeMonth: true, changeYear: true, showButtonPanel: true,
 				onChangeMonthYear: function(year, month) {
-					var logs=getMonthLog(new Date(year, month));
-					renderLog(logs)
+					renderLog(getMonthLog(year, month))
 				},
 				onSelect: function(d){
-					var logs=getDayLog(new Date(d));
-					renderLog(logs)
+					renderLog(getDayLog(new Date(d)))
 				}
 			});
 			$('#calmod').bind('click', function(){
