@@ -12,7 +12,7 @@ function getStat(start, end){
 			lastevent = currevevent
 		}
 		var incident = {summary:0, maxdur:0, countsum:0, count30m:0, count3h:0, count6h:0}
-		tempstat.forEach(function(val,ind,obj){
+		$.each(tempstat,function(ind,val){
 			incident.summary += val.duration
 			incident.countsum++
 			if (incident.maxdur<val.duration) incident.maxdur = val.duration;

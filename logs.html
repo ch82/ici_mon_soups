@@ -49,7 +49,7 @@
 			var str = ''
 			for (host in stat) {
 				var hs = stat[host]
-				str += '<tr>'+'<td>'+host+'</td>'+'<td>'+hs.summary/1000+'</td>'+'<td>'+hs.maxdur/1000+'</td>'+'<td>'+hs.countsum+'</td>'+'<td>'+hs.count30m+'</td>'+ +'<td>'+hs.count3h+'</td>'+'<td>'+hs.count6h+'</td>'+'</tr>'
+				str += '<tr>'+'<td>'+host+'</td>'+'<td>'+hs.summary/1000+'</td>'+'<td>'+hs.maxdur/1000+'</td>'+'<td>'+hs.countsum+'</td>'+'<td>'+hs.count30m+'</td>'+'<td>'+hs.count3h+'</td>'+'<td>'+hs.count6h+'</td>'+'</tr>'
 			}
 			$("#stat").html(str)
 		}
@@ -100,7 +100,7 @@
 			<tbody id="logs"></tbody>
 			</table>
 			<table border=1 class="table" style="display:none;">
-			<thead><tr><th rowspan="2">Узел</th><th colspan="2">Время простоя</th><th colspan="3">Количество потерь</th></tr><tr><th>Сумма</th><th>Максимальное</th><th><30м</th><th>>3ч<th>>6ч</th></tr></thead>
+			<thead><tr><th rowspan="2">Узел</th><th colspan="2">Время простоя</th><th colspan="4">Количество потерь</th></tr><tr><th>Сумма</th><th>Максимальное</th><th>Всего</th><th><30м</th><th>>3ч<th>>6ч</th></tr></thead>
 			<tbody id="stat"></tbody>
 			</table>
 		  </div>
