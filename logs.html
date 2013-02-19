@@ -32,6 +32,7 @@
 			repmod = t
 		}
 		function renderLog(logs){
+			$("#stat").parent().hide()
 			$("#logs").parent().show()
 			$("#logs").html("")
 			for (li in logs) {
@@ -41,15 +42,41 @@
 				}
 			}			
 		}
+		function renderStat(stat){
+			$("#logs").parent().hide()
+			$("#stat").parent().show()
+			$("#stat").html("")
+			var str = ''
+			for (host in stat) {
+				var hs = stat[host]
+				str += '<tr>'+'<td>'+host+'</td>'+'<td>'+hs.summary/1000+'</td>'+'<td>'+hs.maxdur/1000+'</td>'+'<td>'+hs.countsum+'</td>'+'<td>'+hs.count30m+'</td>'+ +'<td>'+hs.count3h+'</td>'+'<td>'+hs.count6h+'</td>'+'</tr>'
+			}
+			$("#stat").html(str)
+		}
 		$(function() {
 			$( "#datepicker" ).datepicker({
 				dateFormat: 'dd MM yy',
 				changeMonth: true, changeYear: true, showButtonPanel: true,
 				onChangeMonthYear: function(year, month) {
-					renderLog(getMonthLog(year, month))
+					if (calmod == 'month')
+						switch(repmod) {
+							case 'logs':
+								renderLog(getMonthLog(year, month))
+								break
+							case 'stat':
+								break
+						}
 				},
 				onSelect: function(d){
-					renderLog(getDayLog(new Date(d)))
+					if (calmod == 'day')
+						switch(repmod) {
+							case 'logs':
+								renderLog(getDayLog(new Date(d)))
+								break
+							case 'stat':
+								renderStat(getDayStat(new Date(d)))
+								break
+					}
 				}
 			});
 		});
@@ -59,7 +86,7 @@
 	<div class="container-fluid">
 		<form>
 			<input type = "radio" name = "reportmod" onclick = "repmodclick('logs')" checked = "checked">Логи
-			<input type = "radio" name = "reportmod" onclick = "repmodclick('stat')" checked = "unchecked">Статистика
+			<input type = "radio" name = "reportmod" onclick = "repmodclick('stat')">Статистика
 			<p>
 			<input type="radio" name="calmod" onclick="calmodclick('day')" checked = "checked">День
 			<input type="radio" name="calmod" onclick="calmodclick('month')">Месяц
@@ -73,7 +100,7 @@
 			<tbody id="logs"></tbody>
 			</table>
 			<table border=1 class="table" style="display:none;">
-			<thead><tr><th rowspan="2">Узел</th><th colspan="2">Время простоя</th><th colspan="3">Количество потерь</th></tr><tr><th>Сумма</th><th>Максимальное</th><th><30м</th><th>>3ч<th><th>>6ч</th></tr></thead>
+			<thead><tr><th rowspan="2">Узел</th><th colspan="2">Время простоя</th><th colspan="3">Количество потерь</th></tr><tr><th>Сумма</th><th>Максимальное</th><th><30м</th><th>>3ч<th>>6ч</th></tr></thead>
 			<tbody id="stat"></tbody>
 			</table>
 		  </div>
