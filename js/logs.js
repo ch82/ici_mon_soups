@@ -46,6 +46,7 @@ function cleanLog(log) {
 			else {
 				laststate = ev.state
 				ev.duration += duration
+				duration = 0
 				evi++
 			}
 		}

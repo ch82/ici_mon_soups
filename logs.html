@@ -20,9 +20,9 @@
 				case 'month':
 					try {style.html('.ui-datepicker-calendar { display:none }')}catch(err){}
 					if (repmod == 'logs')
-						renderLog(getMonthLog(currdate.getUTCFullYear(),currdate.getMonth()+1))
+						renderLog(getMonthLog(currdate.getFullYear(),currdate.getMonth()+1))
 					if (repmod == 'stat')
-						renderStat(getMonthStat(currdate.getUTCFullYear(),currdate.getMonth()+1))
+						renderStat(getMonthStat(currdate.getFullYear(),currdate.getMonth()+1))
 					break;
 				case 'day':
 					try {style.html('.ui-datepicker-calendar { display:table }')}catch(err){}
@@ -69,7 +69,11 @@
 				dateFormat: 'dd MM yy',
 				changeMonth: true, changeYear: true, showButtonPanel: true,
 				onChangeMonthYear: function(year, month) {
-					onChange()
+					if (calmod == 'month') {
+						stoprecursion = true
+						$("#datepicker").datepicker("setDate", new Date(year, month-1));
+						onChange()
+					}
 				},
 				onSelect: function(d){
 					onChange()

@@ -20,7 +20,8 @@ function getStat(start, end){
 			if (val.duration>3*3600*1000) incident.count3h++;return;
 			if (val.duration>30*60*1000) incident.count30m++;return;
 		})
-		statistik[h] = incident
+		if (incident.countsum)
+			statistik[h] = incident
 	}
 	return statistik
 }
