@@ -46,12 +46,14 @@
 			$("#stat").parent().hide()
 			$("#logs").parent().show()
 			$("#logs").html("")
+			var str = ''
 			for (li in logs) {
 				for (lj in logs[li]){
 					l=logs[li][lj]
-					$("#logs").html($("#logs").html()+"<tr><td>"+l.time.toLocaleString()+' '+l.host +' '+l.state+' '+ l.duration/1000+'s'+"</td></tr>")
+					str += $("#logs").html()+"<tr><td>"+l.time.toLocaleString()+' '+l.host +' '+l.state+' '+ l.duration/1000+'s'+"</td></tr>"
 				}
-			}			
+			}
+			$("#logs").html(str)
 		}
 		function renderStat(stat){
 			$("#logs").parent().hide()
