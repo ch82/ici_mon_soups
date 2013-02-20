@@ -13,23 +13,34 @@
 	<style id="calmodstyle"></style>
 	<script>
 		var calmod = 'day', repmod = 'logs'
-		function calmodclick(t){
+		function onChange(){
 			var style = $('#calmodstyle')
 			var currdate = $("#datepicker").datepicker("getDate")
-			calmod = t
-			switch (t) {
+			switch (calmod) {
 				case 'month':
-					style.html('.ui-datepicker-calendar { display:none }')
-					renderLog(getMonthLog(currdate.getUTCFullYear(),currdate.getMonth()+1))
+					try {style.html('.ui-datepicker-calendar { display:none }')}catch(err){}
+					if (repmod == 'logs')
+						renderLog(getMonthLog(currdate.getUTCFullYear(),currdate.getMonth()+1))
+					if (repmod == 'stat')
+						renderStat(getMonthStat(currdate.getUTCFullYear(),currdate.getMonth()+1))
 					break;
 				case 'day':
-					style.html('.ui-datepicker-calendar { display:table }')
-					renderLog(getDayLog(new Date(currdate)))
+					try {style.html('.ui-datepicker-calendar { display:table }')}catch(err){}
+					if (repmod == 'logs')
+						renderLog(getDayLog(new Date(currdate)))
+					if (repmod == 'stat')
+						renderStat(getDayStat(new Date(currdate)))
 					break
 			}
 		}
+
+		function calmodclick(t){
+			calmod = t
+			onChange()
+		}
 		function repmodclick(t){
 			repmod = t
+			onChange()
 		}
 		function renderLog(logs){
 			$("#stat").parent().hide()
@@ -58,25 +69,10 @@
 				dateFormat: 'dd MM yy',
 				changeMonth: true, changeYear: true, showButtonPanel: true,
 				onChangeMonthYear: function(year, month) {
-					if (calmod == 'month')
-						switch(repmod) {
-							case 'logs':
-								renderLog(getMonthLog(year, month))
-								break
-							case 'stat':
-								break
-						}
+					onChange()
 				},
 				onSelect: function(d){
-					if (calmod == 'day')
-						switch(repmod) {
-							case 'logs':
-								renderLog(getDayLog(new Date(d)))
-								break
-							case 'stat':
-								renderStat(getDayStat(new Date(d)))
-								break
-					}
+					onChange()
 				}
 			});
 		});
