@@ -1,6 +1,6 @@
 function parselogEntry(logEntry){
 	var rexp = /^HOST ALERT: (.+?);(DOWN|UP);(SOFT|HARD);\d+;.+$/.exec(logEntry.log_entry)
-	return {'time': new Date(logEntry.timestamp*1000),'host':rexp[1],'state':rexp[2],'duration':''}
+	return {'time': new Date(logEntry.timestamp*1000),'host':rexp[1],'state':rexp[2],'duration':0}
 }
 
 function getLog(start,end,order,limit,noprevseek,filter){
@@ -20,8 +20,9 @@ function getLog(start,end,order,limit,noprevseek,filter){
 			if (!(l.host in logs)) {
 				logs[l.host] = [];
 				if(!noprevseek && l.state=='UP') {
-					var lstlog = getLog(null, l.time/1000-1, 'new2old', 1, true,'HOST+ALERT:+'+l.host+';DOWN')
-					if(lstlog.hasOwnProperty(l.host)) l.duration = l.time - lstlog[l.host][0].time;
+					var lstlog = getLog(null, l.time/1000-1, 'new2old', 1, true,'HOST+ALERT:+'+l.host+';')
+					if(lstlog.hasOwnProperty(l.host)&&lstlog[l.host][0].state=='DOWN') 
+						l.duration = l.time - lstlog[l.host][0].time;
 				}
 			}
 			else {
@@ -45,6 +46,7 @@ function cleanLog(log) {
 			else {
 				laststate = ev.state
 				ev.duration += duration
+				duration = 0
 				evi++
 			}
 		}

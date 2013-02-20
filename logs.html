@@ -9,23 +9,42 @@
 	<script src="js/jquery-ui-1.10.0.custom.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
 	<script src="js/logs.js"></script>
+	<script src="js/stats.js"></script>
 	<style id="calmodstyle"></style>
 	<script>
-		function calmodclick(t){
+		var calmod = 'day', repmod = 'logs'
+		function onChange(){
 			var style = $('#calmodstyle')
 			var currdate = $("#datepicker").datepicker("getDate")
-			switch (t) {
+			switch (calmod) {
 				case 'month':
-					style.html('.ui-datepicker-calendar { display:none }')
-					renderLog(getMonthLog(currdate.getUTCFullYear(),currdate.getMonth()+1))
+					try {style.html('.ui-datepicker-calendar { display:none }')}catch(err){}
+					if (repmod == 'logs')
+						renderLog(getMonthLog(currdate.getFullYear(),currdate.getMonth()+1))
+					if (repmod == 'stat')
+						renderStat(getMonthStat(currdate.getFullYear(),currdate.getMonth()+1))
 					break;
 				case 'day':
-					style.html('.ui-datepicker-calendar { display:table }')
-					renderLog(getDayLog(new Date(currdate)))
+					try {style.html('.ui-datepicker-calendar { display:table }')}catch(err){}
+					if (repmod == 'logs')
+						renderLog(getDayLog(new Date(currdate)))
+					if (repmod == 'stat')
+						renderStat(getDayStat(new Date(currdate)))
 					break
 			}
 		}
+
+		function calmodclick(t){
+			calmod = t
+			onChange()
+		}
+		function repmodclick(t){
+			repmod = t
+			onChange()
+		}
 		function renderLog(logs){
+			$("#stat").parent().hide()
+			$("#logs").parent().show()
 			$("#logs").html("")
 			for (li in logs) {
 				for (lj in logs[li]){
@@ -34,15 +53,30 @@
 				}
 			}			
 		}
+		function renderStat(stat){
+			$("#logs").parent().hide()
+			$("#stat").parent().show()
+			$("#stat").html("")
+			var str = ''
+			for (host in stat) {
+				var hs = stat[host]
+				str += '<tr>'+'<td>'+host+'</td>'+'<td>'+hs.summary/1000+'</td>'+'<td>'+hs.maxdur/1000+'</td>'+'<td>'+hs.countsum+'</td>'+'<td>'+hs.count30m+'</td>'+'<td>'+hs.count3h+'</td>'+'<td>'+hs.count6h+'</td>'+'</tr>'
+			}
+			$("#stat").html(str)
+		}
 		$(function() {
 			$( "#datepicker" ).datepicker({
 				dateFormat: 'dd MM yy',
 				changeMonth: true, changeYear: true, showButtonPanel: true,
 				onChangeMonthYear: function(year, month) {
-					renderLog(getMonthLog(year, month))
+					if (calmod == 'month') {
+						stoprecursion = true
+						$("#datepicker").datepicker("setDate", new Date(year, month-1));
+						onChange()
+					}
 				},
 				onSelect: function(d){
-					renderLog(getDayLog(new Date(d)))
+					onChange()
 				}
 			});
 		});
@@ -51,6 +85,9 @@
 <body>
 	<div class="container-fluid">
 		<form>
+			<input type = "radio" name = "reportmod" onclick = "repmodclick('logs')" checked = "checked">Логи
+			<input type = "radio" name = "reportmod" onclick = "repmodclick('stat')">Статистика
+			<p>
 			<input type="radio" name="calmod" onclick="calmodclick('day')" checked = "checked">День
 			<input type="radio" name="calmod" onclick="calmodclick('month')">Месяц
 		</form>
@@ -58,9 +95,13 @@
 			<p>Date: <div  id="datepicker"></div></p>	
 		  <div class="span6">
 			
-			<table border=1 class="table">
+			<table border=1 class="table" style="display:none;">
 			<thead><th>Логи</th></thead>
 			<tbody id="logs"></tbody>
+			</table>
+			<table border=1 class="table" style="display:none;">
+			<thead><tr><th rowspan="2">Узел</th><th colspan="2">Время простоя</th><th colspan="4">Количество потерь</th></tr><tr><th>Сумма</th><th>Максимальное</th><th>Всего</th><th><30м</th><th>>3ч<th>>6ч</th></tr></thead>
+			<tbody id="stat"></tbody>
 			</table>
 		  </div>
 		  <div class="span6">
