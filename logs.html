@@ -50,7 +50,8 @@
 			for (li in logs) {
 				for (lj in logs[li]){
 					l=logs[li][lj]
-					str += $("#logs").html()+"<tr><td>"+l.time.toLocaleString()+' '+l.host +' '+l.state+' '+ l.duration/1000+'s'+"</td></tr>"
+					var rowclass = (l.state=='UP')?'success':'error'
+					str += "<tr class=\""+rowclass+"\"><td>"+l.time.toLocaleString()+'</td><td>'+l.host +'</td><td>'+l.state+'</td><td>'+ l.duration/1000+'s'+"</td></tr>"
 				}
 			}
 			$("#logs").html(str)
@@ -85,23 +86,24 @@
 	</script>
 </head>
 <body>
-	<div class="container-fluid">
+	<div class="container">
 		<form>
 			<input type = "radio" name = "reportmod" onclick = "repmodclick('logs')" checked = "checked">Логи
 			<input type = "radio" name = "reportmod" onclick = "repmodclick('stat')">Статистика
 			<p>
 			<input type="radio" name="calmod" onclick="calmodclick('day')" checked = "checked">День
 			<input type="radio" name="calmod" onclick="calmodclick('month')">Месяц
+			<p>
+			<p>Date: <div id="datepicker"></div></p>
+			<button class="btn btn-warning" onclick = "onChange()" type="button">Обновить</button>
 		</form>
-		<div class="row-fluid">
-			<p>Date: <div  id="datepicker"></div></p>	
-		  <div class="span6">
-			
-			<table border=1 class="table" style="display:none;">
+		<div class=" ">
+		  <div class="table-bordered table-hover table-condensed">
+			<table class="table" style="display:none;">
 			<thead><th>Логи</th></thead>
 			<tbody id="logs"></tbody>
 			</table>
-			<table border=1 class="table" style="display:none;">
+			<table class="table" style="display:none;">
 			<thead><tr><th rowspan="2">Узел</th><th colspan="2">Время простоя</th><th colspan="4">Количество потерь</th></tr><tr><th>Сумма</th><th>Максимальное</th><th>Всего</th><th><30м</th><th>>3ч<th>>6ч</th></tr></thead>
 			<tbody id="stat"></tbody>
 			</table>
