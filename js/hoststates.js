@@ -11,7 +11,7 @@ function getRTA(s) {
 function makeQuery(){
     var url="/cgi-bin/icinga/status.cgi?hostgroup=ping_group&style=hostdetail&jsonoutput";
 	$.getJSON(url, function(res){
-		$("#hstates").html("");
+		$("#hstates").empty();
 		var hstatuses = res.status.host_status;
 		hstatuses.sort(function(x,y){
 			if(x.status=='UP' && y.status=='UP'){
@@ -21,23 +21,28 @@ function makeQuery(){
 			if(x.status=='DOWN' && y.status=='DOWN'){return getDuration(x)-getDuration(y);};
 			if(x.status=="DOWN"){return -1;};if(x.status=="UP"){return 1;};
 		});
+
 		$.each(hstatuses , function (k,hstate){
-			var row=hstates.insertRow(-1);
-			var chost=row.insertCell(0);
-			var cstate=row.insertCell(1);
-			var cduration=row.insertCell(2);
-			chost.innerText = hstate.host_display_name
-			chost.innerHTML += '<small> ['+dict_host2addr[hstate.host] + ']</small>';
-			cstate.innerText = hstate.status;
-			cduration.innerText = hstate.duration//getDuration(hstate)+'s';
-			if (hstate.status=="DOWN") {
-				row.className="error";
-			}
+			var pasteHtml = "";
+			var status = hstate.status.toLowerCase();
+
+
+			pasteHtml = "<tr>"
+								+ "<td>" + hstate.host_display_name +"</td>"
+								+ "<td class='t_center'>"+ dict_host2addr[hstate.host] +"</td>"
+								+ "<td class='t_center'>"
+								+ "		<div class='status_block on'><span class='label label-"+ status +"'><i class='icon-arrow-"+ status +" icon-white'></i>"+ hstate.status +"</span></div>"
+								+ "</td>"
+								+ "<td>"
+								+ " <div>" + hstate.duration + "</div>";
 			if (hstate.status=="UP") {
-				row.className="success";
-				cduration.innerHTML+="<br />" + getRTA(hstate);
-				cduration.innerHTML+="<br />"+hstate.last_check;
-			}	
+				pasteHtml += "<div>"+ getRTA(hstate) +"</div>";
+			}
+
+			pasteHtml += 	"<div>"+ hstate.last_check +"</div>"
+										+ "</td>"
+										+ "</tr>";		
+			$("#hstates").append(pasteHtml);
 		})
 	});
 }
