@@ -14,7 +14,11 @@ function makeQuery(){
 		$("#hstates").html("");
 		var hstatuses = res.status.host_status;
 		hstatuses.sort(function(x,y){
-			if(x.status==y.status){var diff=getDuration(x)-getDuration(y);return diff;};
+			if(x.status=='UP' && y.status=='UP'){
+				if (x.host_display_name<y.host_display_name) return -1;
+				if (x.host_display_name>y.host_display_name) return 1;
+			}
+			if(x.status=='DOWN' && y.status=='DOWN'){return getDuration(x)-getDuration(y);};
 			if(x.status=="DOWN"){return -1;};if(x.status=="UP"){return 1;};
 		});
 		$.each(hstatuses , function (k,hstate){
