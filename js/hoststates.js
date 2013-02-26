@@ -25,8 +25,6 @@ function makeQuery(){
 		$.each(hstatuses , function (k,hstate){
 			var pasteHtml = "";
 			var status = hstate.status.toLowerCase();
-
-
 			pasteHtml = "<tr>"
 								+ "<td>" + hstate.host_display_name +"</td>"
 								+ "<td class='t_center'>"+ dict_host2addr[hstate.host] +"</td>"
