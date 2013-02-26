@@ -3,12 +3,12 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>Журнал событий</title>
-	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-	<link href="css/style.css" rel="stylesheet" media="screen">
-	<link rel="stylesheet" href="css/jquery-ui.custom.min.css" />
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/datepicker.css" rel="stylesheet">
+	<link href="css/style.css" rel="stylesheet">
 	<script src="js/jquery.js"></script>
-	<script src="js/jquery-ui.custom.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+	<script src="js/bootstrap-datepicker.js"></script>
 	<script src="js/logs.js"></script>
 	<script src="js/stats.js"></script>
 	<style id="calmodstyle"></style>
@@ -18,18 +18,20 @@
 	<script>
 		var calmod = 'day', repmod = 'logs'
 		function onChange(){
-			var style = $('#calmodstyle')
-			var currdate = $("#datepicker").datepicker("getDate")
+			var datepick = $("#datepicker").data().datepicker
+			var currdate = datepick.date
 			switch (calmod) {
 				case 'month':
-					try {style.html('.ui-datepicker-calendar { display:none }')}catch(err){}
+					datepick.startViewMode=1
+					datepick.minViewMode=1
 					if (repmod == 'logs')
 						renderLog(getMonthLog(currdate.getFullYear(),currdate.getMonth()+1))
 					if (repmod == 'stat')
 						renderStat(getMonthStat(currdate.getFullYear(),currdate.getMonth()+1))
 					break;
 				case 'day':
-					try {style.html('.ui-datepicker-calendar { display:table }')}catch(err){}
+					datepick.startViewMode=0
+					datepick.minViewMode=0
 					if (repmod == 'logs')
 						renderLog(getDayLog(new Date(currdate)))
 					if (repmod == 'stat')
@@ -74,20 +76,11 @@
 			$("#stat").html(str)
 		}
 		$(function() {
-			$( "#datepicker" ).datepicker({
-				dateFormat: 'dd MM yy',
-				changeMonth: true, changeYear: true, showButtonPanel: true,
-				onChangeMonthYear: function(year, month) {
-					if (calmod == 'month') {
-						stoprecursion = true
-						$("#datepicker").datepicker("setDate", new Date(year, month-1));
-						onChange()
-					}
-				},
-				onSelect: function(d){
+			$( "#datepicker").datepicker({/*viewMode:'months',minviewMod:'days',*/ format:'dd.mm.yyyy'}).on(
+				'changeDate', function(ev){
 					onChange()
 				}
-			});
+			)
 		});
 	</script>
 </head>
@@ -101,7 +94,8 @@
 			<input type="radio" name="calmod" onclick="calmodclick('day')" checked = "checked">День
 			<input type="radio" name="calmod" onclick="calmodclick('month')">Месяц
 			<p>
-			<p>Date: <div id="datepicker"></div></p>
+			<p>Date:<div> <input id="datepicker" type="text" class="span2" value="12-02-2012" ></div>
+			</p>
 			<button class="btn btn-warning" onclick = "onChange()" type="button">Обновить</button>
 		</form>
 
