@@ -81,6 +81,9 @@
 					onChange()
 				}
 			)
+			var now = new Date()
+			$( "#datepicker").datepicker('setValue',new Date( now.getFullYear(), now.getMonth(),now.getDay() ))
+			onChange()
 		});
 	</script>
 </head>
@@ -94,7 +97,7 @@
 			<input type="radio" name="calmod" onclick="calmodclick('day')" checked = "checked">День
 			<input type="radio" name="calmod" onclick="calmodclick('month')">Месяц
 			<p>
-			<p>Date:<div> <input id="datepicker" type="text" class="span2" value="12-02-2012" ></div>
+			<p>Date:<div> <input id="datepicker" type="text" class="span2"></div>
 			</p>
 			<button class="btn btn-warning" onclick = "onChange()" type="button">Обновить</button>
 		</form>
