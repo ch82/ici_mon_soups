@@ -7,7 +7,7 @@
 .status_block.on{ }
 .status_block.off{  }
 
-
+#divformfixed {position: fixed; top: 28%; left: 7%; }
 .statuses_wrapper td { vertical-align: middle; text-align: left; padding: 5px 10px; }
 .statuses_wrapper td.t_center{ text-align: center; }
 .statuses_wrapper th { text-align: center; padding: 12px 8px;  font-weight: 400;  background-color: #fcfee6;  
