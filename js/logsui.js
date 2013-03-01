@@ -64,6 +64,6 @@ $(function() {
 		}
 	)
 	var now = new Date()
-	$( "#datepicker").datepicker('setValue',new Date( now.getFullYear(), now.getMonth(),now.getDay() ))
+	$( "#datepicker").datepicker('setValue',new Date( now.getFullYear(), now.getMonth(),now.getDate() ))
 	onChange()
 });
