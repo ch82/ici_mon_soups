@@ -1,4 +1,14 @@
-var calmod = 'day', repmod = 'logs'
+var calmod = 'day', repmod = 'logs', host2dispname = {}
+function fillHostDescriptions(){
+	$.ajax({dataType:"json", url:"/cgi-bin/icinga/status.cgi?style=hostdetail&jsonoutput", async:false, success:function(data){
+		$.each(data.status.host_status,function(k,val){
+			host2dispname[val.host] = val.host_display_name
+		})
+	}})
+}
+function printHost(host){
+	return host2dispname?host2dispname[host]:host
+}
 function onChange(){
 	var datepick = $("#datepicker").data().datepicker
 	var currdate = datepick.date
@@ -39,7 +49,7 @@ function renderLog(logs){
 		for (var lj in logs[li]){
 			var l=logs[li][lj]
 			var status = l.state.toLowerCase()
-			str += "<tr><td class=t_center>"+l.time.toLocaleString()+'</td><td class=t_center>'+l.host +'</td><td class=t_center>'+
+			str += "<tr><td class=t_center>"+l.time.toLocaleString()+'</td><td class=t_center>'+ printHost(l.host) +'</td><td class=t_center>'+
 				 "<div class='status_block on'><span class='label label-"+ status +"'><i class='icon-arrow-"+ status +" icon-white'></i>"+ l.state +"</span></div>"
 				+'</td><td class=t_center>'+ l.duration/1000+'s'+"</td></tr>"
 		}
@@ -53,7 +63,7 @@ function renderStat(stat){
 	var str = ''
 	for (host in stat) {
 		var hs = stat[host]
-		str += '<tr>'+'<td>'+host+'</td>'+'<td>'+hs.summary/1000+'</td>'+'<td>'+hs.maxdur/1000+'</td>'+'<td>'+hs.countsum+'</td>'+'<td>'+hs.count30m+'</td>'+'<td>'+hs.count3h+'</td>'+'<td>'+hs.count6h+'</td>'+'</tr>'
+		str += '<tr>'+'<td>'+printHost(host)+'</td>'+'<td>'+hs.summary/1000+'</td>'+'<td>'+hs.maxdur/1000+'</td>'+'<td>'+hs.countsum+'</td>'+'<td>'+hs.count30m+'</td>'+'<td>'+hs.count3h+'</td>'+'<td>'+hs.count6h+'</td>'+'</tr>'
 	}
 	$("#stat").html(str)
 }
@@ -65,5 +75,6 @@ $(function() {
 	)
 	var now = new Date()
 	$( "#datepicker").datepicker('setValue',new Date( now.getFullYear(), now.getMonth(),now.getDate() ))
+	fillHostDescriptions()
 	onChange()
 });
