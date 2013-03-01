@@ -36,3 +36,8 @@ function getMonthStat(year,month) {
 	var end = new Date(year, month) - 1;
 	return getStat( start.valueOf()/1000, Math.floor(end/1000))
 }
+
+$(document).ready(function() {
+	$('.bs-docs-sidenav').affix();
+});
+
