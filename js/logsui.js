@@ -16,6 +16,7 @@ function onChange(){
 		case 'month':
 			datepick.startViewMode=1
 			datepick.minViewMode=1
+			$("#period_div").html($.format.date(currdate,"MMMM yyyy"))
 			if (repmod == 'logs')
 				renderLog(getMonthLog(currdate.getFullYear(),currdate.getMonth()+1))
 			if (repmod == 'stat')
@@ -24,6 +25,7 @@ function onChange(){
 		case 'day':
 			datepick.startViewMode=0
 			datepick.minViewMode=0
+			$("#period_div").html($.format.date(currdate,"dd MMMM yyyy"))
 			if (repmod == 'logs')
 				renderLog(getDayLog(new Date(currdate)))
 			if (repmod == 'stat')
