@@ -7,7 +7,7 @@ function fillHostDescriptions(){
 	}})
 }
 function printHost(host){
-	return host2dispname?host2dispname[host]:host
+	return host2dispname[host]?host2dispname[host]:host
 }
 function onChange(){
 	var datepick = $("#datepicker").data().datepicker
