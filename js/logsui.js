@@ -58,9 +58,12 @@ function renderLog(logs){
 	var str = ''
 	$.each(flatlog, function(k,l){
 			var status = l.state.toLowerCase()
-			str += "<tr><td class=t_center>"+l.time.toLocaleString()+'</td><td class=t_center>'+ printHost(l.host) +'</td><td class=t_center>'+
-				 "<div class='status_block on'><span class='label label-"+ status +"'><i class='icon-arrow-"+ status +" icon-white'></i>"+ l.state +"</span></div>"
-				+'</td><td class=t_center>'+ l.duration/1000+'s'+"</td></tr>"
+			str += '<tr>'
+					+'<td class=t_center>'+l.time.toLocaleString()+'</td>'
+					+'<td class=t_center>'+ printHost(l.host) +'</td>'
+					+'<td class=t_center>'+"<div class='status_block on'><span class='label label-"+ status +"'><i class='icon-arrow-"+ status +" icon-white'></i>"+ l.state +"</span></div>"+'</td>'
+					+'<td class=t_center>'+ l.duration/1000+'s'+"</td>"
+				+'</tr>'
 		}
 	)
 	$("#logs").html(str)
@@ -72,7 +75,15 @@ function renderStat(stat){
 	var str = ''
 	for (host in stat) {
 		var hs = stat[host]
-		str += '<tr>'+'<td>'+printHost(host)+'</td>'+'<td>'+hs.summary/1000+'</td>'+'<td>'+hs.maxdur/1000+'</td>'+'<td>'+hs.countsum+'</td>'+'<td>'+hs.count30m+'</td>'+'<td>'+hs.count3h+'</td>'+'<td>'+hs.count6h+'</td>'+'</tr>'
+		str += '<tr>'
+			+'<td>'+printHost(host)+'</td>'
+			+'<td>'+hs.summary/1000+'</td>'
+			+'<td>'+hs.maxdur/1000+'</td>'
+			+'<td>'+hs.countsum+'</td>'
+			+'<td>'+hs.count30m+'</td>'
+			+'<td>'+hs.count3h+'</td>'
+			+'<td>'+hs.count6h+'</td>'
+		+'</tr>'
 	}
 	$("#stat").html(str)
 }
