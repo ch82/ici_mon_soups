@@ -41,16 +41,16 @@
 					<form>
 						<fieldset>
 							<div class="date " data-date-format="yyyy-mm-dd">
-								<input class="span2 required-entry" id="datepicker"  name="date_end" type="text" >
+								<input class="required-entry" id="datepicker"  name="date_end" type="text" >
 							</div>
 							<div>
-								<select class="span2" name = "reportmod" onchange="repmodclick(this.value)">
+								<select name = "reportmod" onchange="repmodclick(this.value)">
 									<option value="logs">Логи</option>
 									<option value="stat">Статистика</option>
 								</select>
 							</div>
 							<div>
-								<select class="span2" name="calmod" onchange="calmodclick(this.value)">
+								<select name="calmod" onchange="calmodclick(this.value)">
 									<option value="day">День</option>
 									<option value="month">Месяц</option>
 								</select>
