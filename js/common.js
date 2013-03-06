@@ -9,3 +9,14 @@ $(document).ready(function() {
 		}
 	})
 })
+function formatsecs(secs) {
+	var day = Math.floor(secs/86400)
+	var hour = Math.floor(secs%86400/3600)
+	var min = Math.floor(secs%3600/60)
+	var sec = Math.floor(secs%60)
+	return ''
+		+ (day ? day + 'd ' : '')
+		+ hour + ':'
+		+ ('0' + min).slice(-2) + ':'
+		+ ('0' + sec).slice(-2)
+}
