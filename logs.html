@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>Журнал событий</title>
+	<title>Статистика и журнал доступности узлов</title>
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/datepicker.css" rel="stylesheet">
 	<link href="css/style.css" rel="stylesheet">
@@ -30,26 +30,43 @@
 					</div>
 				</div>
 				<div class="span10">
-					<h2>Статистика и журналы доступности хостов</h2>
+					<h2>Статистика и журнал доступности узлов</h2>
 				</div>
 			</div>
 		</div>
 
 		<div class="row">
 			<div class="span3 bs-docs-sidebar">
-			<div class="nav nav-list bs-docs-sidenav">
-						<form>
-							<input type = "radio" name = "reportmod" onclick = "repmodclick('logs')" checked = "checked">Логи
-							<input type = "radio" name = "reportmod" onclick = "repmodclick('stat')">Статистика
-							<p>
-							<input type="radio" name="calmod" onclick="calmodclick('day')" checked = "checked">День
-							<input type="radio" name="calmod" onclick="calmodclick('month')">Месяц
-							<p>
-							<p>Date:<div> <input id="datepicker" type="text" class="span2"></div>
-							</p>
-							<button class="btn btn-warning" onclick = "onChange()" type="button">Обновить</button>
-						</form>
-					</div>
+				<div class="nav nav-list bs-docs-sidenav">
+					<form>
+						<fieldset>
+							<!--<label for="date_start">Date:</label>-->
+							<div class="input-append date dp" data-date-format="yyyy-mm-dd">
+								<input class="span2 required-entry" id="datepicker"  name="date_end" type="text" >
+								<span class="add-on"><i class="icon-calendar"></i></span>
+							</div>
+							<div>
+								<label class="radio inline">
+									<input type = "radio" name = "reportmod" onclick = "repmodclick('logs')" checked = "checked">Логи
+								</label>
+								<label class="radio inline">
+									<input type = "radio" name = "reportmod" onclick = "repmodclick('stat')">Статистика
+								</label>
+							</div>
+							<div>
+								<label class="radio inline">
+									<input type="radio" name="calmod" onclick="calmodclick('day')" checked = "checked">День
+								</label>
+								<label class="radio inline">
+									<input type="radio" name="calmod" onclick="calmodclick('month')">Месяц
+								</label>
+							</div>
+							<div class="btn_wrapper">
+								<button class="btn btn-warning" onclick = "onChange()" type="button">Обновить</button>
+							</div>
+						</fieldset>
+					</form>
+				</div>
 			</div>
 			<div class="span9">
 				<div class="period_wrapper" id="period_div"></div>
