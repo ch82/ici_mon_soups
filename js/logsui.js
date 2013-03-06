@@ -46,16 +46,23 @@ function renderLog(logs){
 	$("#stat").parent().hide()
 	$("#logs").parent().show()
 	$("#logs").html("")
+	var flatlog = []
+	$.each(logs, function(k,vh){
+		$.each(vh, function(k,ve){
+			flatlog.push(ve)
+		})
+	})
+	flatlog.sort(function(x,y){
+		return x.time - y.time
+	})
 	var str = ''
-	for (var li in logs) {
-		for (var lj in logs[li]){
-			var l=logs[li][lj]
+	$.each(flatlog, function(k,l){
 			var status = l.state.toLowerCase()
 			str += "<tr><td class=t_center>"+l.time.toLocaleString()+'</td><td class=t_center>'+ printHost(l.host) +'</td><td class=t_center>'+
 				 "<div class='status_block on'><span class='label label-"+ status +"'><i class='icon-arrow-"+ status +" icon-white'></i>"+ l.state +"</span></div>"
 				+'</td><td class=t_center>'+ l.duration/1000+'s'+"</td></tr>"
 		}
-	}
+	)
 	$("#logs").html(str)
 }
 function renderStat(stat){
