@@ -40,26 +40,20 @@
 				<div class="nav nav-list bs-docs-sidenav">
 					<form>
 						<fieldset>
-							<!--<label for="date_start">Date:</label>-->
-							<div class="input-append date dp" data-date-format="yyyy-mm-dd">
+							<div class="date " data-date-format="yyyy-mm-dd">
 								<input class="span2 required-entry" id="datepicker"  name="date_end" type="text" >
-								<span class="add-on"><i class="icon-calendar"></i></span>
 							</div>
 							<div>
-								<label class="radio inline">
-									<input type = "radio" name = "reportmod" onclick = "repmodclick('logs')" checked = "checked">Логи
-								</label>
-								<label class="radio inline">
-									<input type = "radio" name = "reportmod" onclick = "repmodclick('stat')">Статистика
-								</label>
+								<select class="span2" name = "reportmod" onchange="repmodclick(this.value)">
+									<option value="logs">Логи</option>
+									<option value="stat">Статистика</option>
+								</select>
 							</div>
 							<div>
-								<label class="radio inline">
-									<input type="radio" name="calmod" onclick="calmodclick('day')" checked = "checked">День
-								</label>
-								<label class="radio inline">
-									<input type="radio" name="calmod" onclick="calmodclick('month')">Месяц
-								</label>
+								<select class="span2" name="calmod" onchange="calmodclick(this.value)">
+									<option value="day">День</option>
+									<option value="month">Месяц</option>
+								</select>
 							</div>
 							<div class="btn_wrapper">
 								<button class="btn btn-warning" onclick = "onChange()" type="button">Обновить</button>
