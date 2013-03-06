@@ -14,6 +14,7 @@ function formatsecs(secs) {
 	var hour = Math.floor(secs%86400/3600)
 	var min = Math.floor(secs%3600/60)
 	var sec = Math.floor(secs%60)
+	if (!secs) return ''
 	return ''
 		+ (day ? day + 'd ' : '')
 		+ hour + ':'

@@ -32,7 +32,7 @@ function makeQuery(){
 								+ "		<div class='status_block on'><span class='label label-"+ status +"'><i class='icon-arrow-"+ status +" icon-white'></i>"+ hstate.status +"</span></div>"
 								+ "</td>"
 								+ "<td>"
-								+ " <div>" + hstate.duration + "</div>";
+								+ " <div>" + formatsecs(getDuration(hstate)) + "</div>";
 			if (hstate.status=="UP") {
 				pasteHtml += "<div>"+ getRTA(hstate) +"</div>";
 			}

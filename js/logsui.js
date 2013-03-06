@@ -63,7 +63,7 @@ function renderLog(logs){
 					+'<td class=t_center>'+ printHost(l.host) +'</td>'
 					+'<td class=t_center>'+ dict_host2addr[l.host] +'</td>'
 					+'<td class=t_center>'+"<div class='status_block on'><span class='label label-"+ status +"'><i class='icon-arrow-"+ status +" icon-white'></i>"+ l.state +"</span></div>"+'</td>'
-					+'<td class=t_center>'+ l.duration/1000+'s'+"</td>"
+					+'<td class=t_center>'+ formatsecs(l.duration/1000) +"</td>"
 				+'</tr>'
 		}
 	)
@@ -79,8 +79,8 @@ function renderStat(stat){
 		str += '<tr>'
 			+'<td>'+printHost(host)+'</td>'
 			+'<td>'+dict_host2addr[host]+'</td>'
-			+'<td>'+hs.summary/1000+'</td>'
-			+'<td>'+hs.maxdur/1000+'</td>'
+			+'<td>'+formatsecs(hs.summary/1000)+'</td>'
+			+'<td>'+formatsecs(hs.maxdur/1000)+'</td>'
 			+'<td>'+hs.countsum+'</td>'
 			+'<td>'+hs.count30m+'</td>'
 			+'<td>'+hs.count3h+'</td>'
