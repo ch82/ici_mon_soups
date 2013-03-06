@@ -11,6 +11,7 @@
     <script src="js/bootstrap.min.js"></script>
 	<script src="js/bootstrap-datepicker.js"></script>
 	<script src="js/bootstrap-affix.js"></script>
+	<script src="js/common.js"></script>
 	<script src="js/logs.js"></script>
 	<script src="js/stats.js"></script>
 	<!--[if lt IE 9]>
@@ -58,6 +59,7 @@
 								<tr>
 									<th>Время</th>
 									<th>Узел</th>
+									<th>IP</th>
 									<th>Состояние</th>
 									<th>Длительность</th>
 								</tr>
@@ -67,7 +69,7 @@
 						<table class="table table-bordered table-hover table-condensed" style="display:none;">
 							<thead>
 								<tr>
-									<th rowspan="2">Узел</th>
+									<th rowspan="2" colspan="2">Узел</th>
 									<th colspan="2">Время простоя</th>
 									<th colspan="4">Количество потерь</th>
 								</tr>
@@ -75,7 +77,7 @@
 									<th>Сумма</th>
 									<th>Максимальное</th>
 									<th>Всего</th>
-									<th><30м</th>
+									<th>>30м</th>
 									<th>>3ч</th>
 									<th>>6ч</th>
 								</tr>

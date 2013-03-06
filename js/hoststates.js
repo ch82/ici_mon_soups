@@ -45,14 +45,7 @@ function makeQuery(){
 	});
 }
 
-dict_host2addr = {}
 $(document).ready(function() {
-	$.getJSON('/cgi-bin/icinga/config.cgi?type=hosts&expand=&jsonoutput',
-		function(conf){
-			$.each(conf.config.hosts, function(k,val){
-				dict_host2addr[val.host_name] = val.address
-			})
-		})	
 	window.setInterval(makeQuery,1000);
 	makeQuery();
 });
