@@ -38,7 +38,7 @@ function onChange(){
 			renderStat(getStat(period.start,period.end))
 			break
 		case 'fail':
-			renderFails(sieveDurations(getViolations(period.start, period.end)),300000)
+			renderFails(sieveDurations(getViolations(period.start, period.end),60000))
 			break
 		case 'fail30':
 			renderFails(sieveDurations(getViolations(period.start, period.end)))
