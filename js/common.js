@@ -21,3 +21,20 @@ function formatsecs(secs) {
 		+ ('0' + min).slice(-2) + ':'
 		+ ('0' + sec).slice(-2)
 }
+
+function getReportPeriod(period){
+	switch (period.length){
+		case 1:
+			var day = period[0]
+			var start = day.valueOf()/1000
+			var end = start + 86400
+			break;
+		case 2:
+			var year = period[0]
+			var month = period[1]
+			var start = new Date(year, month - 1).valueOf()/1000
+			var end = Math.floor((new Date(year, month) - 1)/1000)
+			break
+	}
+	return {start:start, end:end}
+}

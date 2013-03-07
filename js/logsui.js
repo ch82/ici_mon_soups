@@ -12,6 +12,7 @@ function printHost(host){
 function onChange(){
 	var datepick = $("#datepicker").data().datepicker
 	var currdate = datepick.date
+	var period
 	$("#stat").parent().hide()
 	$("#logs").parent().hide()
 	$("#fails").parent().hide()
@@ -20,19 +21,21 @@ function onChange(){
 			datepick.startViewMode=1
 			datepick.minViewMode=1
 			$("#period_div").html($.format.date(currdate,"MMMM yyyy"))
-			if (repmod == 'logs')
-				renderLog(getMonthLog(currdate.getFullYear(),currdate.getMonth()+1))
-			if (repmod == 'stat')
-				renderStat(getMonthStat(currdate.getFullYear(),currdate.getMonth()+1))
+			period = getReportPeriod ([currdate.getFullYear(),currdate.getMonth()+1])
 			break;
 		case 'day':
 			datepick.startViewMode=0
 			datepick.minViewMode=0
 			$("#period_div").html($.format.date(currdate,"dd MMMM yyyy"))
-			if (repmod == 'logs')
-				renderLog(getDayLog(new Date(currdate)))
-			if (repmod == 'stat')
-				renderStat(getDayStat(new Date(currdate)))
+			period = getReportPeriod([currdate])
+			break
+	}
+	switch (repmod){
+		case 'logs':
+			renderLog(getLog(period.start,period.end))
+			break
+		case 'stat':
+			renderStat(getStat(period.start,period.end))
 			break
 	}
 }

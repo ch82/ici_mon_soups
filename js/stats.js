@@ -12,7 +12,7 @@ function getAvail(start, end){
 }
 
 function getViolations(start, end){
-	var logs = cleanLog(getLog(start, end))
+	var logs = getLog(start, end)
 	var tempstat = getAvail(start,end)
 	for (var h in logs){
 		var lastevent = null
@@ -48,22 +48,12 @@ function getStat(start, end){
 	return statistik
 }
 
-function getDayStat(day) {
-	var start = day.valueOf()/1000;
-	return getStat( start, start + 86400)
-}
-
-function getMonthStat(year,month) {
-	var start = new Date(year, month - 1);
-	var end = new Date(year, month) - 1;
-	return getStat( start.valueOf()/1000, Math.floor(end/1000))
-}
-
 $(document).ready(function() {
 	$('.bs-docs-sidenav').affix();
 });
 
-function sieveDurations(inlog, limit = 30*60*1000){
+function sieveDurations(inlog, limit){
+	if (!limit) limit = 30*60*1000
 	var sievedlog = []
 	for (var levent in inlog) {
 		if (levent.duration >= limit)
