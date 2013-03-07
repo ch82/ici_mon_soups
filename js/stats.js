@@ -33,7 +33,7 @@ function getViolations(start, end){
 
 function getStat(start, end){
 	var statistik = {}
-	var tempstat = getViolations(logs)
+	var tempstat = getViolations(start, end)
 	$.each(tempstat,function(ind,val){
 		if (!statistik[val.host])
 			statistik[val.host] = {summary:0, maxdur:0, countsum:0, count30m:0, count3h:0, count6h:0}
@@ -62,3 +62,12 @@ function getMonthStat(year,month) {
 $(document).ready(function() {
 	$('.bs-docs-sidenav').affix();
 });
+
+function sieveDurations(inlog, limit = 30*60*1000){
+	var sievedlog = []
+	for (var levent in inlog) {
+		if (levent.duration >= limit)
+			sievedlog.push(levent)
+	}
+	return sievedlog
+}

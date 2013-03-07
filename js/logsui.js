@@ -12,6 +12,9 @@ function printHost(host){
 function onChange(){
 	var datepick = $("#datepicker").data().datepicker
 	var currdate = datepick.date
+	$("#stat").parent().hide()
+	$("#logs").parent().hide()
+	$("#fails").parent().hide()
 	switch (calmod) {
 		case 'month':
 			datepick.startViewMode=1
@@ -43,7 +46,6 @@ function repmodclick(t){
 	onChange()
 }
 function renderLog(logs){
-	$("#stat").parent().hide()
 	$("#logs").parent().show()
 	$("#logs").html("")
 	var flatlog = []
@@ -70,7 +72,6 @@ function renderLog(logs){
 	$("#logs").html(str)
 }
 function renderStat(stat){
-	$("#logs").parent().hide()
 	$("#stat").parent().show()
 	$("#stat").html("")
 	var str = ''
@@ -89,6 +90,14 @@ function renderStat(stat){
 	}
 	$("#stat").html(str)
 }
+
+function renderFails(violations){
+	$("#fails").parent().show()
+	$("#fails").html("")
+	var str = ''
+	$("#fails").html(str)
+}
+
 $(function() {
 	$( "#datepicker").datepicker({/*viewMode:'months',minviewMod:'days',*/ format:'dd.mm.yyyy'}).on(
 		'changeDate', function(ev){
