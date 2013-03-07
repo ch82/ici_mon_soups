@@ -4,7 +4,7 @@ function getAvail(start, end){
 	$.ajax({dataType:"json", url:url, async:false, success:function(data){
 		$.each(data.avail.hostgroup_availability.hostgroup.hosts,function(k,avail){
 			if(avail.percent_total_time_up===0.0){
-				unavail.push({'start':start,'end':end,'host':avail.host_name,'duration':avail.total_time_down*1000})
+				unavail.push({'start':new Date(start*1000),'end':new Date(end*1000),'host':avail.host_name,'duration':avail.total_time_down*1000})
 			}
 		})
 	}})
@@ -55,7 +55,8 @@ $(document).ready(function() {
 function sieveDurations(inlog, limit){
 	if (!limit) limit = 30*60*1000
 	var sievedlog = []
-	for (var levent in inlog) {
+	for (var eventindex in inlog) {
+		var levent = inlog[eventindex]
 		if (levent.duration >= limit)
 			sievedlog.push(levent)
 	}

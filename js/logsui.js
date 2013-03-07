@@ -37,6 +37,12 @@ function onChange(){
 		case 'stat':
 			renderStat(getStat(period.start,period.end))
 			break
+		case 'fail':
+			renderFails(sieveDurations(getViolations(period.start, period.end)),300000)
+			break
+		case 'fail30':
+			renderFails(sieveDurations(getViolations(period.start, period.end)))
+			break
 	}
 }
 
@@ -98,6 +104,15 @@ function renderFails(violations){
 	$("#fails").parent().show()
 	$("#fails").html("")
 	var str = ''
+	$.each(violations, function(k,viol){
+		str += '<tr>'
+			+ '<td>'+ viol.start.toLocaleString() +'</td>'
+			+ '<td>'+ viol.end.toLocaleString() +'</td>'
+			+ '<td>'+ formatsecs(viol.duration/1000) +'</td>'
+			+ '<td>'+ printHost(viol.host) +'</td>'
+			+ '<td>'+ dict_host2addr[viol.host] +'</td>'
+		+'</tr>'
+	})
 	$("#fails").html(str)
 }
 
