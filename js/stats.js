@@ -4,15 +4,14 @@ function getAvail(start, end){
 	$.ajax({dataType:"json", url:url, async:false, success:function(data){
 		$.each(data.avail.hostgroup_availability.hostgroup.hosts,function(k,avail){
 			if(avail.percent_total_time_up===0.0){
-				unavail.push({'host':avail.host_name,'duration':avail.total_time_down*1000})
+				unavail.push({'start':start,'end':end,'host':avail.host_name,'duration':avail.total_time_down*1000})
 			}
 		})
 	}})
 	return unavail
 }
 
-function getStat(start, end){
-	var statistik = {}
+function getViolations(start, end){
 	var logs = cleanLog(getLog(start, end))
 	var tempstat = getAvail(start,end)
 	for (var h in logs){
@@ -20,15 +19,21 @@ function getStat(start, end){
 		for (var ev in logs[h]){
 			var currevevent = logs[h][ev]
 			if (currevevent.state == 'UP'){
-				var error = { 'host':currevevent.host, 'duration':currevevent.duration}
+				var error = { 'host':currevevent.host, 'duration':currevevent.duration, 'end':currevevent.time, 'start':new Date(currevevent.time-currevevent.duration)}
 				tempstat.push (error)
 			}
 			lastevent = currevevent
 		}
 		if (lastevent.state == 'DOWN') {
-			tempstat.push ({ 'host':lastevent.host, 'duration': end*1000 - lastevent.time.valueOf()})
+			tempstat.push ({ 'host':lastevent.host, 'duration':(end*1000 - lastevent.time.valueOf()), start:lastevent.time, end:new Date(end*1000)})
 		}
 	}
+	return tempstat
+}
+
+function getStat(start, end){
+	var statistik = {}
+	var tempstat = getViolations(logs)
 	$.each(tempstat,function(ind,val){
 		if (!statistik[val.host])
 			statistik[val.host] = {summary:0, maxdur:0, countsum:0, count30m:0, count3h:0, count6h:0}
@@ -57,4 +62,3 @@ function getMonthStat(year,month) {
 $(document).ready(function() {
 	$('.bs-docs-sidenav').affix();
 });
-
