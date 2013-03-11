@@ -3,7 +3,7 @@ function getAvail(start, end){
 	var unavail=[]
 	$.ajax({dataType:"json", url:url, async:false, success:function(data){
 		$.each(data.avail.hostgroup_availability.hostgroup.hosts,function(k,avail){
-			if(avail.percent_total_time_up===0.0){
+			if(avail.percent_total_time_down==100){
 				unavail.push({'start':new Date(start*1000),'end':new Date(end*1000),'host':avail.host_name,'duration':avail.total_time_down*1000})
 			}
 		})
