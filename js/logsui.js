@@ -2,7 +2,7 @@ var calmod = 'day', repmod = 'logs', host2dispname = {}
 function fillHostDescriptions(){
 	$.ajax({dataType:"json", url:"/cgi-bin/icinga/status.cgi?style=hostdetail&jsonoutput", async:false, success:function(data){
 		$.each(data.status.host_status,function(k,val){
-			host2dispname[val.host] = val.host_display_name
+			host2dispname[val.host_name] = val.host_display_name
 		})
 	}})
 }

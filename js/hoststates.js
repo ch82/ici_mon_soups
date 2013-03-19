@@ -27,7 +27,7 @@ function makeQuery(){
 			var status = hstate.status.toLowerCase();
 			pasteHtml = "<tr>"
 								+ "<td>" + hstate.host_display_name +"</td>"
-								+ "<td class='t_center'>"+ dict_host2addr[hstate.host] +"</td>"
+								+ "<td class='t_center'>"+ dict_host2addr[hstate.host_name] +"</td>"
 								+ "<td class='t_center'>"
 								+ "		<div class='status_block on'><span class='label label-"+ status +"'><i class='icon-arrow-"+ status +" icon-white'></i>"+ hstate.status +"</span></div>"
 								+ "</td>"
