@@ -10,7 +10,7 @@ function getLog(start,end,order,limit,noprevseek,filter){
 		if (!order) { order = "old2new" }
 		if (!limit) { limit = 1000000 }
 		if (!filter) { filter = 'HOST+ALERT'}
-		return "/cgi-bin/icinga/showlog.cgi?ts_start="+ start+"&num_displayed="+limit+"&order="+order+"&ts_end="+end+"&query_string="+filter+"&timeperiod=custom&noti=off&hst=on&sst=off&cmd=off&sms=off&evh=off&flp=off&dwn=off&jsonoutput";
+		return "/cgi-bin/icinga/showlog.cgi?ts_start="+ start+"&limit="+limit+"&order="+order+"&ts_end="+end+"&query_string="+filter+"&timeperiod=custom&noti=off&hst=on&sst=off&cmd=off&sms=off&evh=off&flp=off&dwn=off&jsonoutput";
 	}
 	var logs = {};
 	$.ajax({dataType:"json", url:generateURL(), async:false, success:function(j){
