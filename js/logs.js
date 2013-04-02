@@ -1,5 +1,5 @@
 function parselogEntry(logEntry){
-	var rexp = /^HOST ALERT: (.+?);(DOWN|UP);(SOFT|HARD);\d+;.+$/.exec(logEntry.log_entry)
+	var rexp = /^HOST ALERT: (.+?);(DOWN|UP|UNREACHABLE);(SOFT|HARD);\d+;.+$/.exec(logEntry.log_entry)
 	return {'time': new Date(logEntry.timestamp*1000),'host':rexp[1],'state':rexp[2],'duration':0}
 }
 
