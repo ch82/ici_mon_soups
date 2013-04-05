@@ -1,6 +1,6 @@
 dict_host2addr = {}
 $(document).ready(function() {
-	$.ajax('/cgi-bin/icinga/config.cgi?type=hosts&expand=&jsonoutput', {
+	$.ajax( settings.baseurl+'/config.cgi?type=hosts&expand=&jsonoutput', {
 		async: false,
 		success: function(conf) {
 			$.each(conf.config.hosts, function(k, val) {

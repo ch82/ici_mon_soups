@@ -1,5 +1,5 @@
 function getAvail(start, end){
-	var url="/cgi-bin/icinga/avail.cgi?&hostgroup=ping_group&timeperiod=custom&rpttimeperiod=&assumeinitialstates=yes&assumestateretention=yes&assumestatesduringnotrunning=yes&includesoftstates=no&initialassumedhoststate=0&initialassumedservicestate=0&backtrack=30&content_type=html%22&jsonoutput" +'&t1='+start+'&t2='+end
+	var url=settings.baseurl+"/avail.cgi?&hostgroup=" +settings.group+ "&timeperiod=custom&rpttimeperiod=&assumeinitialstates=yes&assumestateretention=yes&assumestatesduringnotrunning=yes&includesoftstates=no&initialassumedhoststate=0&initialassumedservicestate=0&backtrack=30&content_type=html%22&jsonoutput" +'&t1='+start+'&t2='+end
 	var unavail=[]
 	$.ajax({dataType:"json", url:url, async:false, success:function(data){
 		$.each(data.avail.hostgroup_availability.hostgroup.hosts,function(k,avail){
