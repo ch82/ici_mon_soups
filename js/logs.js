@@ -1,6 +1,7 @@
 function parselogEntry(logEntry){
 	var rexp = /^HOST ALERT: (.+?);(DOWN|UP|UNREACHABLE);(SOFT|HARD);\d+;.+$/.exec(logEntry.log_entry)
-	return {'time': new Date(logEntry.timestamp*1000),'host':rexp[1],'state':rexp[2],'duration':0}
+	return {'time': new Date(logEntry.timestamp*1000),'host':rexp[1],'state':rexp[2],'duration':0,
+		'state_type':rexp[3]}
 }
 
 function getLog(start,end,order,limit,noprevseek,filter){
@@ -10,13 +11,24 @@ function getLog(start,end,order,limit,noprevseek,filter){
 		if (!order) { order = "old2new" }
 		if (!limit) { limit = 1000000 }
 		if (!filter) { filter = 'HOST+ALERT'}
-		return "/cgi-bin/icinga/showlog.cgi?ts_start="+ start+"&limit="+limit+"&order="+order+"&ts_end="+end+"&query_string="+filter+"&timeperiod=custom&noti=off&hst=on&sst=off&cmd=off&sms=off&evh=off&flp=off&dwn=off&jsonoutput";
+		return settings.baseurl+"/showlog.cgi?ts_start="+ start+"&limit="+limit+"&order="+order+"&ts_end="+end+"&query_string="+filter+"&timeperiod=custom&noti=off&hst=on&sst=off&cmd=off&sms=off&evh=off&flp=off&dwn=off&jsonoutput";
 	}
 	var logs = {};
 	$.ajax({dataType:"json", url:generateURL(), async:false, success:function(j){
 		var rawlog = j.showlog.log_entries
 		for (le in rawlog){
 			var l = parselogEntry(rawlog[le]);
+			switch (l.state_type){
+				case 'UNREACHABLE':
+					continue
+				case 'HARD':
+					break
+				case 'SOFT':
+					if(settings.min_state_type=='SOFT')
+						break
+				default:
+					continue
+			}
 			if (!(l.host in logs)) {
 				logs[l.host] = [];
 				if(!noprevseek && l.state=='UP') {

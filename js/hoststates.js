@@ -9,7 +9,7 @@ function getRTA(s) {
 }
 
 function makeQuery(){
-    var url="/cgi-bin/icinga/status.cgi?hostgroup=ping_group&style=hostdetail&jsonoutput";
+    var url= settings.baseurl+"/status.cgi?hostgroup=" + settings.group + "&style=hostdetail&jsonoutput";
 	$.getJSON(url, function(res){
 		$("#hstates").empty();
 		var hstatuses = res.status.host_status;
