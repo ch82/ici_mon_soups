@@ -22,30 +22,61 @@ function makeQuery(){
 			if(x.status=="DOWN"){return -1;};if(x.status=="UP"){return 1;};
 		});
 
-		$.each(hstatuses , function (k,hstate){
+		prev_statuses = new Array();
+		for(i=0; i < hstatuses.length; i++){
+			prev_statuses[hstatuses[i].host_name] = hstatuses[i];
+			if(hstatuses[i].status == "DOWN" && temp_statuses[hstatuses[i].host_name] !== undefined){
+					//если сервер изменил состояние на DOWN
+					if(hstatuses[i].status != temp_statuses[hstatuses[i].host_name].status){
+						beep();
+						show_message(hstatuses[i].host_display_name + " изменил состояние на  DOWN");
+					}
+			}
 			var pasteHtml = "";
-			var status = hstate.status.toLowerCase();
+			var status = hstatuses[i].status.toLowerCase();
 			pasteHtml = "<tr>"
-								+ "<td>" + hstate.host_display_name +"</td>"
-								+ "<td class='t_center'>"+ dict_host2addr[hstate.host_name] +"</td>"
+								+ "<td class='col1'>" + hstatuses[i].host_display_name +"</td>"
+								+ "<td class='t_center'>"+ dict_host2addr[hstatuses[i].host_name] +"</td>"
 								+ "<td class='t_center'>"
-								+ "		<div class='status_block on'><span class='label label-"+ status +"'><i class='icon-arrow-"+ status +" icon-white'></i>"+ hstate.status +"</span></div>"
+								+ "		<div class='status_block on'><span class='label label-"+ status +"'><i class='icon-arrow-"+ status +" icon-white'></i>"+ hstatuses[i].status +"</span></div>"
 								+ "</td>"
 								+ "<td>"
-								+ " <div>" + formatsecs(getDuration(hstate)) + "</div>";
-			if (hstate.status=="UP") {
-				pasteHtml += "<div>"+ getRTA(hstate) +"</div>";
+								+ " <div>" + formatsecs(getDuration(hstatuses[i])) + "</div>";
+			if (hstatuses[i].status=="UP") {
+				pasteHtml += "<div>"+ getRTA(hstatuses[i]) +"</div>";
 			}
 
-			pasteHtml += 	"<div>"+ hstate.last_check +"</div>"
+			pasteHtml += 	"<div>"+ hstatuses[i].last_check +"</div>"
 										+ "</td>"
 										+ "</tr>";		
 			$("#hstates").append(pasteHtml);
-		})
+		}
+		temp_statuses = prev_statuses;
 	});
 }
 
+function beep () {
+	 var thissound = document.getElementById("audio1");
+		thissound.play();
+		// alert("Канал передачи данных изменил состояние");
+}
+
+function show_message (mess_str) {
+	$.gritter.add({
+				title: 'Warning',
+				text: mess_str,
+				sticky: false,
+				time: '25000',
+				position: 'bottom-right'
+			});
+}
+var temp_statuses;
 $(document).ready(function() {
-	window.setInterval(makeQuery,1000);
+		$.extend($.gritter.options, {
+		    position: 'bottom-right', 
+		});
+		temp_statuses = new Array();
+		window.setInterval(makeQuery,2000);
 	makeQuery();
+
 });

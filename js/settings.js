@@ -1,5 +1,5 @@
 var settings = {
 	baseurl	: "/cgi-bin/icinga"
 ,	group	: "ping_group"
-,	min_state_type : "HARD"
+,	min_state_type : "SOFT"
 }
