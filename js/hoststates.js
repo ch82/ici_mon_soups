@@ -7,36 +7,58 @@ function getDuration(s) {
 function getRTA(s) {
     return /RTA\s+=\s*\d+\.\d+\s+ms$/.exec(s.status_information)[0];
 }
-
+function reprName(x){
+	return x[x.t+'_display_name']
+}
 function makeQuery(){
-    var url= settings.baseurl+"/status.cgi?hostgroup=" + settings.group + "&style=hostdetail&jsonoutput";
-	$.getJSON(url, function(res){
+    var hurl= settings.baseurl+"/status.cgi?hostgroup=" + settings.group + "&style=hostdetail&jsonoutput";
+    var surl= settings.baseurl+"/status.cgi?servicegroup=" + settings.service_group + "&style=detail&jsonoutput";
+    if(!makeQuery.hstatuses) makeQuery.hstatuses=[]
+    if(!makeQuery.sstatuses) makeQuery.sstatuses=[]
+	var hstatuses
+    if (!this.hqry || $.inArray( this.hqry.state(), ["pending","resolved"])==-1)
+		this.hqry = $.getJSON(hurl, function(res){
+			makeQuery.hstatuses = res.status.host_status;
+		});
+    if (!this.sqry || $.inArray(this.sqry.state(),["pending","resolved"])==-1)
+		this.sqry = $.getJSON(surl, function(res){
+			makeQuery.sstatuses = res.status.service_status;
+		});
+	if (this.hqry && this.sqry && this.hqry.state()==this.sqry.state() && this.sqry.state()=="resolved")
+	try {
 		$("#hstates").empty();
-		var hstatuses = res.status.host_status;
+		hstatuses = makeQuery.hstatuses.concat(makeQuery.sstatuses)
+		$.each(hstatuses,function(k,v){
+			if(v.service_description) { v.t='service' } else {v.t='host'}
+			v.s='other'
+			if($.inArray( v.status,['UP','OK'])!=-1) v.s='good'
+			if($.inArray(v.status,['DOWN','WARNING','CRITICAL','UNREACHABLE'])!=-1) v.s='bad'
+		})
 		hstatuses.sort(function(x,y){
-			if(x.status=='UP' && y.status=='UP'){
+			if(x.s == 'good' && y.s == 'good'){
 				if (x.host_display_name<y.host_display_name) return -1;
 				if (x.host_display_name>y.host_display_name) return 1;
 			}
-			if(x.status=='DOWN' && y.status=='DOWN'){return getDuration(x)-getDuration(y);};
-			if(x.status=="DOWN"){return -1;};if(x.status=="UP"){return 1;};
+			if(x.s == 'bad' && y.s == 'bad'){return getDuration(x)-getDuration(y);};
+			if(x.s == 'bad'){return -1;};if(x.s == 'good'){return 1;};
 		});
 
 		prev_statuses = new Array();
 		for(i=0; i < hstatuses.length; i++){
 			prev_statuses[hstatuses[i].host_name] = hstatuses[i];
-			if(hstatuses[i].status == "DOWN" && temp_statuses[hstatuses[i].host_name] !== undefined){
+			if(hstatuses[i].s == 'bad' && temp_statuses[hstatuses[i].host_name] !== undefined){
 					//если сервер изменил состояние на DOWN
 					if(hstatuses[i].status != temp_statuses[hstatuses[i].host_name].status){
 						beep();
-						show_message(hstatuses[i].host_display_name + " изменил состояние на  DOWN");
+						show_message(reprName(hstatuses[i]) + " изменил состояние на  DOWN");
 					}
 			}
 			var pasteHtml = "";
 			var status = hstatuses[i].status.toLowerCase();
+			var status = hstatuses[i].s == 'good' ? 'up' : hstatuses[i].s == 'bad' ? 'down' : ''
 			pasteHtml = "<tr>"
-								+ "<td class='col1'>" + hstatuses[i].host_display_name +"</td>"
-								+ "<td class='t_center'>"+ dict_host2addr[hstatuses[i].host_name] +"</td>"
+								+ "<td class='col1'>" + reprName(hstatuses[i]) +"</td>"
+								+ "<td class='t_center'>"+ (hstatuses[i].t=='host' ? dict_host2addr[hstatuses[i].host_name]:'') +"</td>"
 								+ "<td class='t_center'>"
 								+ "		<div class='status_block on'><span class='label label-"+ status +"'><i class='icon-arrow-"+ status +" icon-white'></i>"+ hstatuses[i].status +"</span></div>"
 								+ "</td>"
@@ -52,7 +74,11 @@ function makeQuery(){
 			$("#hstates").append(pasteHtml);
 		}
 		temp_statuses = prev_statuses;
-	});
+	}
+	catch (err){}
+	finally {
+		this.hqry = this.sqry = null		
+	}
 }
 
 function beep () {
@@ -76,7 +102,7 @@ $(document).ready(function() {
 		    position: 'bottom-right', 
 		});
 		temp_statuses = new Array();
-		window.setInterval(makeQuery,2000);
+		window.setInterval(makeQuery, settings.refresh_interval);
 	makeQuery();
 
 });
